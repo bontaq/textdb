@@ -5,6 +5,7 @@ defmodule Textdb.Data do
   schema "data" do
     field :location, :string
     field :uuid, :string
+    field :hash, :string
 
     timestamps()
   end

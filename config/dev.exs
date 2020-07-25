@@ -28,7 +28,11 @@ config :textdb, TextdbWeb.Endpoint,
       "--watch-stdin",
       cd: Path.expand("../assets", __DIR__)
     ]
-  ]
+  ],
+  hash_secret: "hello"
+
+config :textdb, TextdbWeb.ApiController,
+  hash_secret: "hello"
 
 # ## SSL Support
 #

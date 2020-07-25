@@ -19,6 +19,13 @@ defmodule TextdbWeb.DataLive do
     # if connected?(socket), do: Process.send_after(self(), :update, 3000)
 
     data = get_data(id)
+    data_hash = get_hash_data(id)
+    editing_enabled =
+      if data_hash do
+        true
+      else
+        false
+      end
 
     {:ok,
      assign(socket,
@@ -27,12 +34,23 @@ defmodule TextdbWeb.DataLive do
          :data => data,
          :time => NaiveDateTime.utc_now,
          :editing => false,
+         :editing_enabled => editing_enabled,
          :changeset => Data.changeset(%Data{}, %{})
        })}
   end
 
+  def get_hash_data(id) do
+    data = Data |> Repo.get_by(%{:hash => id})
+    if data do
+      File.read!(data.location)
+    else
+      nil
+    end
+  end
+
   def get_data(id) do
     data = Data |> Repo.get_by(%{:uuid => id})
+
     case data do
       nil ->
         TextdbWeb.ApiController.write_file(id, "")

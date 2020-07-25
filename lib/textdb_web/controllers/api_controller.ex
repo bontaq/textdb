@@ -14,23 +14,33 @@ defmodule TextdbWeb.ApiController do
     File.write!(location, data)
 
     data = Data |> Repo.get_by(%{:uuid => id})
+    data_hash = Data |> Repo.get_by(%{:uuid => id})
+    key = Application.get_env(:textdb, TextdbWeb.Endpoint)[:hash_secret]
 
-    if data == nil do
-      %Data{location: location, uuid: id}
-      |> Repo.insert!
+    Logger.info(key)
+
+    if data_hash do
+      "Writing not allowed with this endpoint"
     else
-      new_time = NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)
+      if data == nil do
+        %Data{location: location,
+              uuid: id,
+              hash: :crypto.hmac(:sha256, key, id) |> Base.encode16}
+        |> Repo.insert!
+      else
+        new_time = NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)
 
-      data
-      |> Ecto.Changeset.change(updated_at: new_time)
-      |> Repo.update!
+        data
+        |> Ecto.Changeset.change(updated_at: new_time)
+        |> Repo.update!
+      end
+
+      TextdbWeb.Endpoint.broadcast_from!(
+        self(),
+        "updates/" <> id,
+        "data", %{}
+      )
     end
-
-    TextdbWeb.Endpoint.broadcast_from!(
-      self(),
-      "updates/" <> id,
-      "data", %{}
-    )
   end
 
   def write_data("text/plain", id, conn) do
@@ -71,6 +81,13 @@ defmodule TextdbWeb.ApiController do
 
   def fetch_data(conn, %{"id" => id}) do
     data = Data |> Repo.get_by(%{:uuid => id})
+
+    data =
+      case data do
+        nil -> Data |> Repo.get_by(%{:hash => id})
+        _ -> data
+      end
+
     content_type = conn |> get_req_header("accept") |> List.first
 
     Logger.info(inspect(content_type))
