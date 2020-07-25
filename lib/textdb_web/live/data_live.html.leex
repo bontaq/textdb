@@ -1,17 +1,27 @@
 <main role="main" class="container">
   <section>
-    viewing: <%= @id%>
+    viewing: <%= @id %>
   </section>
-  <%= if @editing do %>
-    <%= f = form_for @changeset, "#", [phx_submit: :save_edit] %>
+  <%= if @editing_enabled do %>
+    <%= if @editing do %>
+      <%= f = form_for @changeset, "#", [phx_submit: :save_edit] %>
       <button class="edit" phx-click="cancel_edit">cancel</button>
       <button class="edit" type="submit">save</button>
       <section class="data">
         <%= textarea f, :data, value: @data, class: "edit-data" %>
       </section>
     </form>
-  <% else %>
+    <% else %>
     <button class="edit" phx-click="start_edit">edit</button>
     <section class="data"><%= @data %></section>
+    <% end %>
+  <%= else %>
+    <section class="data"><%= @data %></section>
+  <% end %>
+
+  <%= if @editing_enabled == true do %>
+    <section>
+      read only link: <span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span>
+    </section>
   <% end %>
 </main>

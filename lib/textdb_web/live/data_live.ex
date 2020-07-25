@@ -16,22 +16,37 @@ defmodule TextdbWeb.DataLive do
 
     TextdbWeb.Endpoint.subscribe(@topic <> id)
 
-    # if connected?(socket), do: Process.send_after(self(), :update, 3000)
-
     data = get_data(id)
     data_hash = get_hash_data(id)
+
     editing_enabled =
       if data_hash do
-        true
-      else
         false
+      else
+        true
+      end
+
+    hash =
+      if data != "" do
+        d = Data |> Repo.get_by(%{:uuid => id})
+        d.hash
+      else
+        id
+      end
+
+    probably_data =
+      if data == "" do
+        data_hash
+      else
+        data
       end
 
     {:ok,
      assign(socket,
        %{
          :id => id,
-         :data => data,
+         :hash => hash,
+         :data => probably_data,
          :time => NaiveDateTime.utc_now,
          :editing => false,
          :editing_enabled => editing_enabled,

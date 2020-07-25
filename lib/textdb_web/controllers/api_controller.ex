@@ -11,18 +11,16 @@ defmodule TextdbWeb.ApiController do
   def write_file(id, data) do
     location = "./priv/static/data/" <> id
 
-    File.write!(location, data)
-
-    data = Data |> Repo.get_by(%{:uuid => id})
-    data_hash = Data |> Repo.get_by(%{:uuid => id})
+    data_data = Data |> Repo.get_by(%{:uuid => id})
+    data_hash = Data |> Repo.get_by(%{:hash => id})
     key = Application.get_env(:textdb, TextdbWeb.Endpoint)[:hash_secret]
 
-    Logger.info(key)
-
-    if data_hash do
+    if data_hash != nil do
       "Writing not allowed with this endpoint"
     else
-      if data == nil do
+      File.write!(location, data)
+
+      if data_data == nil do
         %Data{location: location,
               uuid: id,
               hash: :crypto.hmac(:sha256, key, id) |> Base.encode16}
@@ -30,7 +28,7 @@ defmodule TextdbWeb.ApiController do
       else
         new_time = NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)
 
-        data
+        data_data
         |> Ecto.Changeset.change(updated_at: new_time)
         |> Repo.update!
       end
@@ -40,22 +38,24 @@ defmodule TextdbWeb.ApiController do
         "updates/" <> id,
         "data", %{}
       )
+
+      data
     end
   end
 
   def write_data("text/plain", id, conn) do
     {:ok, body, _conn} = Plug.Conn.read_body(conn)
-    write_file(id, body)
+    new_body = write_file(id, body)
 
-    text conn, body
+    text conn, new_body
   end
 
   def write_data("application/json", id, conn) do
     json_string = Jason.encode!(conn.body_params)
 
-    write_file(id, json_string)
+    new_body = write_file(id, json_string)
 
-    json conn, conn.body_params
+    json conn, new_body
   end
 
   def write_data("application/x-www-form-urlencoded", id, conn) do
@@ -65,9 +65,9 @@ defmodule TextdbWeb.ApiController do
       |> Enum.map(fn {x, y} -> "#{x}=#{y}" end)
       |> Enum.join("&")
 
-    write_file(id, form_encoded)
+    new_body = write_file(id, form_encoded)
 
-    text conn, form_encoded
+    text conn, new_body
   end
 
   def update_data(conn, params) do
