@@ -122,7 +122,7 @@ button {
   cursor: pointer;
 }
 
-.edit-data {
+.data textarea {
   color: #fffce1;
   text-align: center;
 }
@@ -132,6 +132,10 @@ button {
   margin-top: 25px;
   min-width: 50%;
   min-height: 500px;
+}
+
+.data textarea {
+  font-align: center;
 }
 
 textarea {
