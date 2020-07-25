@@ -21,7 +21,7 @@
 
   <%= if @editing_enabled == true do %>
     <section>
-      read only link: <span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span>
+      read only link: <span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span>, remember to use <span class="green">https://textdb.dev/api/data/<%= @hash %></span> for API calls.
     </section>
   <% end %>
 </main>
