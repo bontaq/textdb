@@ -104,6 +104,14 @@ button {
     -webkit-appearance: none;
 }
 
+.green {
+  color: #aef77d;
+}
+
+.green a {
+  color: #aef77d;
+}
+
 .edit {
   margin-top: 15px;
   padding: 0 10px;
