@@ -9,7 +9,7 @@
   <p>Update your data with</p>
   <code>curl -d "hello world" -H "content-type: text/plain" <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @uuid %></span></code>
 
-  <p>You can access your data with</p>
+  <p>Access your data with</p>
   <code>curl <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @uuid %></span></code>
 
   <p>Or view it with live updates at</p>
