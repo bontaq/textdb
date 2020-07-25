@@ -99,11 +99,18 @@ defmodule TextdbWeb.DataLive do
   def handle_event("save_edit", value, socket) do
     Logger.info(inspect(value))
 
-    %{"data" => %{"data" => new_value}} = value
-    from_save = save_data(socket.assigns.id, new_value)
+    if socket.assigns.editing do
+      %{"data" => %{"data" => new_value}} = value
+      from_save = save_data(socket.assigns.id, new_value)
 
-    {:noreply,
-     assign(socket, %{:editing => false,
-                      :data => from_save})}
+      {:noreply,
+       assign(socket, %{:editing => false,
+                        :data => from_save})}
+    else
+      {:noreply,
+       assign(socket, %{:editing => false,
+                        :data => socket.assigns.data})}
+    end
+
   end
 end
