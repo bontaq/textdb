@@ -26,12 +26,13 @@ defmodule TextdbWeb.DataLive do
         true
       end
 
+    db_data = Data |> Repo.get_by(%{:uuid => id})
+
     hash =
-      if data != "" do
-        d = Data |> Repo.get_by(%{:uuid => id})
-        d.hash
+      if db_data != nil do
+        db_data.hash
       else
-        id
+        ""
       end
 
     probably_data =

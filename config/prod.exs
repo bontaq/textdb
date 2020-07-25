@@ -22,7 +22,7 @@ config :textdb, TextdbWeb.Endpoint,
 config :logger, level: :info
 
 config :textdb, Textdb.Repo,
-  username: "postgres",
+  username: "ubuntu",
   password: "supersecret",
   database: "textdb",
   hostname: "localhost",

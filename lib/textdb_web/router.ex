@@ -21,6 +21,8 @@ defmodule TextdbWeb.Router do
 
     get "/", PageController, :index
     live "/data/:id", DataLive
+
+    get "/analytics", AnalyticsController, :index
   end
 
   scope "/api", TextdbWeb do
