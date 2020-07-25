@@ -31,9 +31,6 @@ config :textdb, TextdbWeb.Endpoint,
   ],
   hash_secret: "hello"
 
-config :textdb, TextdbWeb.ApiController,
-  hash_secret: "hello"
-
 # ## SSL Support
 #
 # In order to use HTTPS in development, a self-signed

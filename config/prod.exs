@@ -15,14 +15,15 @@ config :textdb, TextdbWeb.Endpoint,
   server: true,
   check_origin: false,
   ssl: false,
-  cache_static_manifest: "priv/static/cache_manifest.json"
+  cache_static_manifest: "priv/static/cache_manifest.json",
+  hash_secret: "fakeoutpw"
 
 # Do not print debug messages in production
 config :logger, level: :info
 
 config :textdb, Textdb.Repo,
-  username: "ubuntu",
-  password: "",
+  username: "postgres",
+  password: "supersecret",
   database: "textdb",
   hostname: "localhost",
   show_sensitive_data_on_connection_error: false,
