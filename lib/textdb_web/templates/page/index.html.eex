@@ -1,0 +1,25 @@
+<section class="intro">
+  <h1>TextDB</h1>
+  <h2>A simple way to share small amounts of data</h2>
+</section>
+
+<section class="info">
+  <p>Let's name your data <span class="uuid"><%= @uuid %></span></p>
+
+  <p>Update your data with</p>
+  <code>curl -d "hello world" -H "content-type: text/plain" <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @uuid %></span></code>
+
+  <p>You can access your data with</p>
+  <code>curl <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @uuid %></span></code>
+
+  <p>Or view it with live updates at</p>
+  <code><a href="https://textdb.dev/data/<%= @uuid %>"><span class="textdb">https://textdb.dev/data/</span><span class="uuid"><%= @uuid %></span></a></code>
+</section>
+
+<section class="more-info">
+  <p>Additional Information</p>
+  <p>Textdb should respect your headers, say if you do -H "accepts: application/json" it will return json.</p>
+  <p>Likewise, if you do -H "content-type: application/json" when posting, it will validate the json.</p>
+  <p>If you have the data open on your browser, it should live update on writes.</p>
+  <p>Yes, anyone with the link can edit the data.</p>
+</section>

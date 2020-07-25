@@ -1,0 +1,17 @@
+<main role="main" class="container">
+  <section>
+    viewing: <%= @id%>
+  </section>
+  <%= if @editing do %>
+    <%= f = form_for @changeset, "#", [phx_submit: :save_edit] %>
+      <button class="edit" phx-click="cancel_edit">cancel</button>
+      <button class="edit" type="submit">save</button>
+      <section class="data">
+        <%= textarea f, :data, value: @data, class: "edit-data" %>
+      </section>
+    </form>
+  <% else %>
+    <button class="edit" phx-click="start_edit">edit</button>
+    <section class="data"><%= @data %></section>
+  <% end %>
+</main>
