@@ -7,6 +7,7 @@ defmodule TextdbWeb.ApiController do
 
   alias Textdb.Data
   alias Textdb.Repo
+  alias Textdb.Analytic
 
 
   def data_requested() do
