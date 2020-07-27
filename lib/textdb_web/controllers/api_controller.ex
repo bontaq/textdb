@@ -8,12 +8,49 @@ defmodule TextdbWeb.ApiController do
   alias Textdb.Data
   alias Textdb.Repo
 
+
+  def data_requested() do
+    today = NaiveDateTime.utc_now() |> NaiveDateTime.to_date()
+
+    analytic = Analytic |> Repo.get_by(%{
+       topic: "data_requested",
+       date: today
+    })
+
+    case analytic do
+      nil -> %Analytic{topic: "data_requested", date: today, count: 0} |> Repo.insert()
+      _ ->
+        analytic
+        |> Analytic.changeset(%{ count: analytic.count + 1})
+        |> Repo.update()
+    end
+  end
+
+  def data_written() do
+    today = NaiveDateTime.utc_now() |> NaiveDateTime.to_date()
+
+    analytic = Analytic |> Repo.get_by(%{
+       topic: "data_written",
+       date: today
+    })
+
+    case analytic do
+      nil -> %Analytic{topic: "data_written", date: today, count: 0} |> Repo.insert()
+      _ ->
+        analytic
+        |> Analytic.changeset(%{ count: analytic.count + 1})
+        |> Repo.update()
+    end
+  end
+
   def write_file(id, data) do
     location = "./priv/static/data/" <> id
 
     data_data = Data |> Repo.get_by(%{:uuid => id})
     data_hash = Data |> Repo.get_by(%{:hash => id})
     key = Application.get_env(:textdb, TextdbWeb.Endpoint)[:hash_secret]
+
+    Task.start(fn -> data_written() end)
 
     if data_hash != nil do
       "Writing not allowed with this endpoint"
@@ -90,7 +127,7 @@ defmodule TextdbWeb.ApiController do
 
     content_type = conn |> get_req_header("accept") |> List.first
 
-    Logger.info(inspect(content_type))
+    Task.start(fn -> data_requested() end)
 
     case data do
       nil ->
