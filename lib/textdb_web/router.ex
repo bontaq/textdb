@@ -30,6 +30,7 @@ defmodule TextdbWeb.Router do
 
     get "/data/:id", ApiController, :fetch_data
     post "/data/:id", ApiController, :update_data
+    options("/data/:id", ApiController, :options0)
   end
 
   # Other scopes may use custom stacks.
