@@ -13,6 +13,7 @@ defmodule TextdbWeb.Router do
   end
 
   pipeline :api do
+    plug CORSPlug, origin: "*"
     plug :accepts, ["text/plain", "application/json", "json"]
   end
 
