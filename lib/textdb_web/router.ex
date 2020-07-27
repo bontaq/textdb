@@ -22,7 +22,7 @@ defmodule TextdbWeb.Router do
     get "/", PageController, :index
     live "/data/:id", DataLive
 
-    get "/analytics", AnalyticsController, :index
+    # get "/analytics", AnalyticsController, :index
   end
 
   scope "/api", TextdbWeb do
@@ -30,6 +30,7 @@ defmodule TextdbWeb.Router do
 
     get "/data/:id", ApiController, :fetch_data
     post "/data/:id", ApiController, :update_data
+    options("/data/:id", ApiController, :options)
   end
 
   # Other scopes may use custom stacks.
