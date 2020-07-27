@@ -15,6 +15,6 @@ defmodule Textdb.Analytic do
   def changeset(analytic, attrs) do
     analytic
     |> cast(attrs, [:topic, :subtopic, :count, :date])
-    |> validate_required([:topic, :subtopic, :count, :date])
+    |> validate_required([:topic, :count, :date])
   end
 end
