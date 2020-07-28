@@ -23,4 +23,5 @@
   <p>If you have the data open on your browser, it should live update on writes.</p>
   <p>Yes, anyone with the link can edit the data.</p>
   <p>The source code is at <span class="green"><a href="https://github.com/bontaq/textdb">https://github.com/bontaq/textdb</a></span> if you'd like to check it out.</p>
+  <p>If you would like something, or something is broken, please contact me at <span class="green">bontaq@gmail.com</span></p>
 </section>
