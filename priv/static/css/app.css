@@ -141,8 +141,16 @@ button.selected {
   min-height: 500px;
 }
 
-.data textarea {
-  font-align: center;
+.data textarea.right {
+  text-align: right;
+}
+
+.data textarea.center {
+  text-align: center;
+}
+
+.data textarea.left {
+  text-align: left;
 }
 
 textarea {

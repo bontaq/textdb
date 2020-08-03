@@ -13,10 +13,10 @@
     </form>
     <% else %>
     <button class="edit" phx-click="start_edit">edit</button>
-    <section class="data"><textarea readonly><%= @data %></textarea></section>
+    <section class="data"><textarea readonly class=<%= @alignment %>><%= @data %></textarea></section>
     <% end %>
   <%= else %>
-    <section class="data"><textarea readonly><%= @data %></textarea></section>
+    <section class="data"><textarea readonly class=<%= @alignment %>><%= @data %></textarea></section>
   <% end %>
 
   <%= if @editing_enabled == true do %>
