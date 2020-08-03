@@ -13,15 +13,39 @@
     </form>
     <% else %>
     <button class="edit" phx-click="start_edit">edit</button>
-    <section class="data"><textarea readonly><%= @data %></textarea></section>
+    <section class="data"><textarea readonly class=<%= @alignment %>><%= @data %></textarea></section>
     <% end %>
   <%= else %>
-    <section class="data"><textarea readonly><%= @data %></textarea></section>
+    <section class="data"><textarea readonly class=<%= @alignment %>><%= @data %></textarea></section>
   <% end %>
 
   <%= if @editing_enabled == true do %>
     <section>
-      read only link: <span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span>, remember to use <span class="green">https://textdb.dev/api/data/<%= @hash %></span> for read only API calls.
+      <p>
+      change text alignment:
+        <%= if @alignment == "left" do %>
+          <button phx-click="update_alignment" value="left" class="selected">Left</button>
+        <% else %>
+          <button phx-click="update_alignment" value="left">Left</button>
+        <% end %>
+
+        <%= if @alignment == "center" do %>
+          <button phx-click="update_alignment" value="center" class="selected">Center</button>
+        <% else %>
+          <button phx-click="update_alignment" value="center">Center</button>
+        <% end %>
+
+        <%= if @alignment == "right" do %>
+          <button phx-click="update_alignment" value="right" class="selected">Right</button>
+        <% else %>
+          <button phx-click="update_alignment" value="right">Right</button>
+        <% end %>
+      </p>
+    </section>
+    <section>
+      <p>
+        read only link: <span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span>, remember to use <span class="green">https://textdb.dev/api/data/<%= @hash %></span> for read only API calls.
+      </p>
     </section>
   <% end %>
 </main>

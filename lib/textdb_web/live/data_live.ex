@@ -35,6 +35,13 @@ defmodule TextdbWeb.DataLive do
         ""
       end
 
+    alignment =
+      if db_data != nil do
+        db_data.alignment
+      else
+        "center"
+      end
+
     probably_data =
       if data == "" do
         data_hash
@@ -48,6 +55,7 @@ defmodule TextdbWeb.DataLive do
          :id => id,
          :hash => hash,
          :data => probably_data,
+         :alignment => alignment,
          :time => NaiveDateTime.utc_now,
          :editing => false,
          :editing_enabled => editing_enabled,
@@ -92,21 +100,6 @@ defmodule TextdbWeb.DataLive do
     end
   end
 
-  # def handle_info(:update, socket) do
-  #   Process.send_after(self(), :update, 10000)
-  #   Logger.info("Connect " <> inspect(connected?(socket)))
-
-  #   id = socket.assigns.id
-
-  #   {data, time} = get_data_with_time_check(
-  #     id,
-  #     socket.assigns.time,
-  #     socket.assigns.data
-  #   )
-
-  #   {:noreply, assign(socket, %{:data => data, :time => time})}
-  # end
-
   def handle_info(%{event: "data", payload: payload}, socket) do
     {data, time} = get_data_with_time_check(
       socket.assigns.id,
@@ -131,8 +124,6 @@ defmodule TextdbWeb.DataLive do
   end
 
   def handle_event("save_edit", value, socket) do
-    Logger.info(inspect(value))
-
     if socket.assigns.editing do
       %{"data" => %{"data" => new_value}} = value
       from_save = save_data(socket.assigns.id, new_value)
@@ -145,6 +136,27 @@ defmodule TextdbWeb.DataLive do
        assign(socket, %{:editing => false,
                         :data => socket.assigns.data})}
     end
-
   end
+
+  def handle_event("update_alignment", %{"value" => value}, socket) do
+    Task.start(fn -> save_change_alignment(socket.assigns.id, value) end)
+
+    {:noreply, assign(socket, %{:alignment => value})}
+  end
+
+  def save_change_alignment(id, value) do
+    data = Data |> Repo.get_by(%{:uuid => id})
+
+    case data do
+      nil ->
+        TextdbWeb.ApiController.write_file(id, "")
+      _ -> nil
+    end
+
+    data = Data |> Repo.get_by(%{:uuid => id})
+    data
+    |> Data.changeset(%{ alignment: value })
+    |> Repo.update()
+  end
+
 end

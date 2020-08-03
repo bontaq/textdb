@@ -6,6 +6,7 @@ defmodule Textdb.Data do
     field :location, :string
     field :uuid, :string
     field :hash, :string
+    field :alignment , :string
 
     timestamps()
   end
@@ -13,7 +14,7 @@ defmodule Textdb.Data do
   @doc false
   def changeset(data, attrs) do
     data
-    |> cast(attrs, [:uuid, :location])
+    |> cast(attrs, [:uuid, :location, :alignment])
     |> validate_required([:uuid, :location])
   end
 end
