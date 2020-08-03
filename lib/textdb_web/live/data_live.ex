@@ -124,8 +124,6 @@ defmodule TextdbWeb.DataLive do
   end
 
   def handle_event("save_edit", value, socket) do
-    Logger.info(inspect(value))
-
     if socket.assigns.editing do
       %{"data" => %{"data" => new_value}} = value
       from_save = save_data(socket.assigns.id, new_value)
@@ -141,17 +139,12 @@ defmodule TextdbWeb.DataLive do
   end
 
   def handle_event("update_alignment", %{"value" => value}, socket) do
-    # db_data = Data |> Repo.get_by(%{:uuid => socket.assigns.id})
-    Logger.info(inspect value)
-
     Task.start(fn -> save_change_alignment(socket.assigns.id, value) end)
 
     {:noreply, assign(socket, %{:alignment => value})}
   end
 
   def save_change_alignment(id, value) do
-    Logger.info(inspect value)
-
     data = Data |> Repo.get_by(%{:uuid => id})
 
     case data do
