@@ -143,6 +143,10 @@ textarea {
   min-height: 500px;
 }
 
+textarea[readonly] {
+  border: 1px solid white;
+}
+
 /* Headers */
 header {
   width: 100%;
