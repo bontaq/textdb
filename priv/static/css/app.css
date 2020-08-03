@@ -102,6 +102,13 @@ button {
 
     /* Corrects inability to style clickable `input` types in iOS */
     -webkit-appearance: none;
+
+    cursor: pointer;
+}
+
+button.selected {
+  cursor: pointer;
+  border-bottom: 1px solid white;
 }
 
 .green {
