@@ -2,7 +2,7 @@ use Mix.Config
 
 # Configure your database
 config :textdb, Textdb.Repo,
-  username: "postgres",
+  username: "textdb",
   password: "supersecret",
   database: "textdb",
   hostname: "localhost",
