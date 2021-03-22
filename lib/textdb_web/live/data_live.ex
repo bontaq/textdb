@@ -139,6 +139,10 @@ defmodule TextdbWeb.DataLive do
     end
   end
 
+  def handle_event("set_tmp_data", %{"value" => value}, socket) do
+    {:noreply, assign(socket, %{:data => value})}
+  end
+
   def handle_event("update_alignment", %{"value" => value}, socket) do
     Task.start(fn -> save_change_alignment(socket.assigns.id, value) end)
 

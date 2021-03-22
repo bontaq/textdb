@@ -8,7 +8,13 @@
       <button class="edit" phx-click="cancel_edit">cancel</button>
       <button class="edit" type="submit">save</button>
       <section class="data">
-        <%= textarea f, :data, value: @data, class: "edit-data #{@alignment}" %>
+          <%=
+            textarea f,
+            :data,
+            value: @data,
+            class: "edit-data #{@alignment}",
+            phx_blur: :set_tmp_data
+          %>
       </section>
     </form>
     <% else %>
@@ -20,7 +26,11 @@
     </section>
     <% end %>
   <%= else %>
-    <section class="data"><textarea readonly class=<%= @alignment %>><%= @data %></textarea></section>
+    <section class="data">
+        <textarea readonly class=<%= @alignment %>>
+            <%= @data %>
+        </textarea>
+    </section>
   <% end %>
 
   <%= if @editing_enabled == true do %>
