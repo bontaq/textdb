@@ -25,7 +25,7 @@ defmodule TextdbWeb.Endpoint do
     at: "/",
     from: :textdb,
     gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css fonts images js favicon.ico robots.txt favicon)
   )
 
   # Code reloading can be explicitly enabled under the
