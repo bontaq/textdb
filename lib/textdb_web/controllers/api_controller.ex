@@ -9,20 +9,23 @@ defmodule TextdbWeb.ApiController do
   alias Textdb.Repo
   alias Textdb.Analytic
 
-
   def data_requested() do
     today = NaiveDateTime.utc_now() |> NaiveDateTime.to_date()
 
-    analytic = Analytic |> Repo.get_by(%{
-       topic: "data_requested",
-       date: today
-    })
+    analytic =
+      Analytic
+      |> Repo.get_by(%{
+        topic: "data_requested",
+        date: today
+      })
 
     case analytic do
-      nil -> %Analytic{topic: "data_requested", date: today, count: 0} |> Repo.insert()
+      nil ->
+        %Analytic{topic: "data_requested", date: today, count: 0} |> Repo.insert()
+
       _ ->
         analytic
-        |> Analytic.changeset(%{ count: analytic.count + 1})
+        |> Analytic.changeset(%{count: analytic.count + 1})
         |> Repo.update()
     end
   end
@@ -30,16 +33,20 @@ defmodule TextdbWeb.ApiController do
   def data_written() do
     today = NaiveDateTime.utc_now() |> NaiveDateTime.to_date()
 
-    analytic = Analytic |> Repo.get_by(%{
-       topic: "data_written",
-       date: today
-    })
+    analytic =
+      Analytic
+      |> Repo.get_by(%{
+        topic: "data_written",
+        date: today
+      })
 
     case analytic do
-      nil -> %Analytic{topic: "data_written", date: today, count: 0} |> Repo.insert()
+      nil ->
+        %Analytic{topic: "data_written", date: today, count: 0} |> Repo.insert()
+
       _ ->
         analytic
-        |> Analytic.changeset(%{ count: analytic.count + 1})
+        |> Analytic.changeset(%{count: analytic.count + 1})
         |> Repo.update()
     end
   end
@@ -59,22 +66,25 @@ defmodule TextdbWeb.ApiController do
       File.write!(location, data)
 
       if data_data == nil do
-        %Data{location: location,
-              uuid: id,
-              hash: :crypto.hmac(:sha256, key, id) |> Base.encode16}
-        |> Repo.insert!
+        %Data{
+          location: location,
+          uuid: id,
+          hash: :crypto.hmac(:sha256, key, id) |> Base.encode16()
+        }
+        |> Repo.insert!()
       else
-        new_time = NaiveDateTime.truncate(NaiveDateTime.utc_now, :second)
+        new_time = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
         data_data
         |> Ecto.Changeset.change(updated_at: new_time)
-        |> Repo.update!
+        |> Repo.update!()
       end
 
       TextdbWeb.Endpoint.broadcast_from!(
         self(),
         "updates/" <> id,
-        "data", %{}
+        "data",
+        %{}
       )
 
       data
@@ -85,7 +95,7 @@ defmodule TextdbWeb.ApiController do
     {:ok, body, _conn} = Plug.Conn.read_body(conn)
     new_body = write_file(id, body)
 
-    text conn, new_body
+    text(conn, new_body)
   end
 
   def write_data("application/json", id, conn) do
@@ -93,25 +103,25 @@ defmodule TextdbWeb.ApiController do
 
     new_body = write_file(id, json_string)
 
-    json conn, new_body
+    json(conn, new_body)
   end
 
   def write_data("application/x-www-form-urlencoded", id, conn) do
     form_encoded =
       conn.body_params
-      |> Map.to_list
+      |> Map.to_list()
       |> Enum.map(fn {x, y} -> "#{x}=#{y}" end)
       |> Enum.join("&")
 
     new_body = write_file(id, form_encoded)
 
-    text conn, new_body
+    text(conn, new_body)
   end
 
   def update_data(conn, params) do
     Logger.info(inspect(params))
 
-    content_type = conn |> get_req_header("content-type") |> List.first
+    content_type = conn |> get_req_header("content-type") |> List.first()
     id = params |> Map.get("id")
 
     write_data(content_type, id, conn)
@@ -126,21 +136,23 @@ defmodule TextdbWeb.ApiController do
         _ -> data
       end
 
-    content_type = conn |> get_req_header("accept") |> List.first
+    content_type = conn |> get_req_header("accept") |> List.first()
 
     Task.start(fn -> data_requested() end)
 
     case data do
       nil ->
         write_file(id, "")
+
         case content_type do
-          "application/json" -> json conn, ""
-          _ -> text conn, ""
+          "application/json" -> json(conn, "")
+          _ -> text(conn, "")
         end
+
       info ->
         case content_type do
-          "application/json" -> json conn, File.read!(info.location)
-          _ -> text conn, File.read!(info.location)
+          "application/json" -> json(conn, File.read!(info.location))
+          _ -> text(conn, File.read!(info.location))
         end
     end
   end

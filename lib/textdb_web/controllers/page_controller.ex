@@ -7,16 +7,20 @@ defmodule TextdbWeb.PageController do
   def page_viewed() do
     today = NaiveDateTime.utc_now() |> NaiveDateTime.to_date()
 
-    analytic = Analytic |> Repo.get_by(%{
-       topic: "landing_page",
-       date: today
-    })
+    analytic =
+      Analytic
+      |> Repo.get_by(%{
+        topic: "landing_page",
+        date: today
+      })
 
     case analytic do
-      nil -> %Analytic{topic: "landing_page", date: today, count: 0} |> Repo.insert()
+      nil ->
+        %Analytic{topic: "landing_page", date: today, count: 0} |> Repo.insert()
+
       _ ->
         analytic
-        |> Analytic.changeset(%{ count: analytic.count + 1})
+        |> Analytic.changeset(%{count: analytic.count + 1})
         |> Repo.update()
     end
   end

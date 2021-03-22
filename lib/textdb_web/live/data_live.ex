@@ -50,21 +50,24 @@ defmodule TextdbWeb.DataLive do
       end
 
     {:ok,
-     assign(socket,
+     assign(
+       socket,
        %{
          :id => id,
          :hash => hash,
          :data => probably_data,
          :alignment => alignment,
-         :time => NaiveDateTime.utc_now,
+         :time => NaiveDateTime.utc_now(),
          :editing => false,
          :editing_enabled => editing_enabled,
          :changeset => Data.changeset(%Data{}, %{})
-       })}
+       }
+     )}
   end
 
   def get_hash_data(id) do
     data = Data |> Repo.get_by(%{:hash => id})
+
     if data do
       File.read!(data.location)
     else
@@ -79,6 +82,7 @@ defmodule TextdbWeb.DataLive do
       nil ->
         TextdbWeb.ApiController.write_file(id, "")
         ""
+
       _ ->
         File.read!(data.location)
     end
@@ -96,16 +100,17 @@ defmodule TextdbWeb.DataLive do
     case should_update do
       :lt -> {data, time}
       :eq -> {data, time}
-      :gt -> {File.read!(check_data.location), NaiveDateTime.utc_now}
+      :gt -> {File.read!(check_data.location), NaiveDateTime.utc_now()}
     end
   end
 
   def handle_info(%{event: "data", payload: payload}, socket) do
-    {data, time} = get_data_with_time_check(
-      socket.assigns.id,
-      socket.assigns.time,
-      socket.assigns.data
-    )
+    {data, time} =
+      get_data_with_time_check(
+        socket.assigns.id,
+        socket.assigns.time,
+        socket.assigns.data
+      )
 
     {:noreply, assign(socket, %{:data => data, :time => time})}
   end
@@ -128,13 +133,9 @@ defmodule TextdbWeb.DataLive do
       %{"data" => %{"data" => new_value}} = value
       from_save = save_data(socket.assigns.id, new_value)
 
-      {:noreply,
-       assign(socket, %{:editing => false,
-                        :data => from_save})}
+      {:noreply, assign(socket, %{:editing => false, :data => from_save})}
     else
-      {:noreply,
-       assign(socket, %{:editing => false,
-                        :data => socket.assigns.data})}
+      {:noreply, assign(socket, %{:editing => false, :data => socket.assigns.data})}
     end
   end
 
@@ -150,13 +151,15 @@ defmodule TextdbWeb.DataLive do
     case data do
       nil ->
         TextdbWeb.ApiController.write_file(id, "")
-      _ -> nil
+
+      _ ->
+        nil
     end
 
     data = Data |> Repo.get_by(%{:uuid => id})
+
     data
-    |> Data.changeset(%{ alignment: value })
+    |> Data.changeset(%{alignment: value})
     |> Repo.update()
   end
-
 end

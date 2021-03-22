@@ -3,10 +3,10 @@ defmodule Textdb.Analytic do
   import Ecto.Changeset
 
   schema "analytics" do
-    field :count, :integer
-    field :date, :date
-    field :subtopic, :string
-    field :topic, :string
+    field(:count, :integer)
+    field(:date, :date)
+    field(:subtopic, :string)
+    field(:topic, :string)
 
     timestamps()
   end

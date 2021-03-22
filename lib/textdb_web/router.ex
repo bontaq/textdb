@@ -4,33 +4,33 @@ defmodule TextdbWeb.Router do
   import Phoenix.LiveView.Router
 
   pipeline :browser do
-    plug :accepts, ["html"]
-    plug :fetch_session
-    plug :fetch_live_flash
-    plug :protect_from_forgery
-    plug :put_secure_browser_headers
-    plug :put_root_layout, {TextdbWeb.LayoutView, :root}
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:put_root_layout, {TextdbWeb.LayoutView, :root})
   end
 
   pipeline :api do
-    plug CORSPlug, origin: "*"
-    plug :accepts, ["text/plain", "application/json", "json"]
+    plug(CORSPlug, origin: "*")
+    plug(:accepts, ["text/plain", "application/json", "json"])
   end
 
   scope "/", TextdbWeb do
-    pipe_through :browser
+    pipe_through(:browser)
 
-    get "/", PageController, :index
-    live "/data/:id", DataLive
+    get("/", PageController, :index)
+    live("/data/:id", DataLive)
 
     # get "/analytics", AnalyticsController, :index
   end
 
   scope "/api", TextdbWeb do
-    pipe_through :api
+    pipe_through(:api)
 
-    get "/data/:id", ApiController, :fetch_data
-    post "/data/:id", ApiController, :update_data
+    get("/data/:id", ApiController, :fetch_data)
+    post("/data/:id", ApiController, :update_data)
     options("/data/:id", ApiController, :options)
   end
 
@@ -50,8 +50,8 @@ defmodule TextdbWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: TextdbWeb.Telemetry
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: TextdbWeb.Telemetry)
     end
   end
 end

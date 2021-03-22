@@ -3,10 +3,10 @@ defmodule Textdb.Data do
   import Ecto.Changeset
 
   schema "data" do
-    field :location, :string
-    field :uuid, :string
-    field :hash, :string
-    field :alignment , :string
+    field(:location, :string)
+    field(:uuid, :string)
+    field(:hash, :string)
+    field(:alignment, :string)
 
     timestamps()
   end

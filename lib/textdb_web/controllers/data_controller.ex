@@ -17,6 +17,7 @@ defmodule TextdbWeb.DataController do
     case read_data do
       nil ->
         "Not found"
+
       info ->
         File.read!(info.location)
     end
