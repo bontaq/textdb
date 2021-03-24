@@ -56,9 +56,20 @@
         <% end %>
       </p>
     </section>
-    <section>
-      <p>
-        read only link: <span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span>, remember to use <span class="green">https://textdb.dev/api/data/<%= @hash %></span> for read only API calls.
+    <section class="data-api">
+        <p>API</p>
+        <p>Update your data with</p>
+        <code>curl -d "hello world" -H "content-type: text/plain" <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @id %></span></code>
+
+        <p>Access your data with</p>
+        <code>curl <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @id %></span></code>
+    </section>
+    <section class="data-api">
+        <p>Read only link & API</p>
+        <p>Read only link</p>
+        <code><span class="green"><a href="https://textdb.dev/data/<%= @hash %>">https://textdb.dev/data/<%= @hash %></a></span></code>
+        <p>Read only API access</p>
+        <code>curl <span class="textdb">https://textdb.dev/api/data/</span><span class="uuid"><%= @hash %></span></code>
       </p>
     </section>
   <% end %>
