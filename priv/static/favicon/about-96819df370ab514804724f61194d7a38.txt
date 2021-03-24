@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: IBM Plex Mono
+- Font Author: Copyright 2017 IBM Corp. All rights reserved.
+- Font Source: http://fonts.gstatic.com/s/ibmplexmono/v6/-F63fjptAgt5VM-kVkqdyU8n5igg1l9kn-s.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL)
